@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 public static class ArraysTester {
     /// <summary>
     /// Entry point for the tests
@@ -39,7 +40,19 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        // first i realize i need a dynamic array
+        // then i need to fill the array with numbers, so i need a loop
+        // the loop repeats the number of times specified by length
+        // for each iteration, add (to the array) the number multipled by the current index of the loop
+        // return the array
+
+        List<double> numbers = new List<double>();
+
+        for (int i = 1; i < length; i++) {
+            numbers.Add(i * number);
+        }
+
+        return numbers.ToArray(); // replace this return statement with your own
     }
     
     /// <summary>
@@ -57,5 +70,25 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
+        // create two slices of the array 
+        // one slice starts at (length - 1) - amount, and ends at length - 1
+        // second slice starts at 0, and ends at (length - 1) - amount
+        // clear array, and rebuild with the slices, but with their positions swapped
+        // swap slices of array, and rewrite array
+
+        List<int> sliceRight = new List<int>();
+        List<int> sliceLeft = new List<int>();
+
+        for (int i = 0; i < data.Count() - amount; i++) {
+            sliceLeft.Add(data[i]);
+        }
+
+        for (int i = data.Count() - amount; i < data.Count(); i++) {
+            sliceRight.Add(data[i]);
+        }
+
+        data.Clear();
+        data.AddRange(sliceRight);
+        data.AddRange(sliceLeft);
     }
 }
