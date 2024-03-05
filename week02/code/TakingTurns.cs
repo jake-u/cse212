@@ -16,6 +16,7 @@
         while (players.Length > 0)
             players.GetNextPerson();
         // Defect(s) Found: 
+        // does not 'cycle' through the queue; behaves like a stack
 
         Console.WriteLine("---------");
 
@@ -39,6 +40,7 @@
             players.GetNextPerson();
 
         // Defect(s) Found: 
+        // same as test 1
 
         Console.WriteLine("---------");
 
@@ -57,6 +59,8 @@
             // Console.WriteLine(players);
         }
         // Defect(s) Found: 
+        // same as test 1
+        // Tim is not re-added to the queue
 
         Console.WriteLine("---------");
 
@@ -74,6 +78,7 @@
             // Console.WriteLine(players);
         }
         // Defect(s) Found: 
+        // same as test 3
 
         Console.WriteLine("---------");
 
@@ -84,5 +89,6 @@
         players = new TakingTurnsQueue();
         players.GetNextPerson();
         // Defect(s) Found:
+        // none, unless the error message should halt the program 
     }
 }
