@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 public static class SetsAndMapsTester {
     public static void Run() {
@@ -111,6 +112,20 @@ public static class SetsAndMapsTester {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+
+        HashSet<string> encounteredWords = new HashSet<string>();
+
+        foreach (string word in words) {
+            char[] characters = word.ToCharArray();
+            Array.Reverse(characters);
+            string wordRev = new string(characters);
+
+            if (encounteredWords.Contains(word) || encounteredWords.Contains(wordRev)) {
+                Console.WriteLine($"{word} & {wordRev}");
+            } else {
+                encounteredWords.Add(word);
+            }
+        }
     }
 
     /// <summary>
@@ -132,6 +147,8 @@ public static class SetsAndMapsTester {
         foreach (var line in File.ReadLines(filename)) {
             var fields = line.Split(",");
             // Todo Problem 2 - ADD YOUR CODE HERE
+            if (degrees.ContainsKey(fields[3])) degrees[fields[3]]++;
+            else degrees.Add(fields[3], 1);
         }
 
         return degrees;
@@ -157,8 +174,27 @@ public static class SetsAndMapsTester {
     /// # Problem 3 #
     /// #############
     private static bool IsAnagram(string word1, string word2) {
-        // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        Dictionary<char, int> chars = new Dictionary<char, int>();
+        Dictionary<char, int> chars2 = new Dictionary<char, int>();
+
+        word1 = word1.ToLower();
+        word2 = word2.ToLower();
+
+        word1 = Regex.Replace(word1, @"\s+", "");
+        word2 = Regex.Replace(word2, @"\s+", "");
+
+        foreach (char c in word1)
+        {
+            if (chars.ContainsKey(c)) chars[c]++;
+            else chars.Add(c, 1);
+        }
+        foreach (char c in word2)
+        {
+            if (chars2.ContainsKey(c)) chars2[c]++;
+            else chars2.Add(c, 1);
+        }
+
+        return chars.Keys.Count == chars2.Keys.Count && chars.Keys.All((k) => chars2.ContainsKey(k) && chars[k] == chars2[k]);
     }
 
     /// <summary>
@@ -230,7 +266,7 @@ public static class SetsAndMapsTester {
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
-
+        featureCollection.printFeatures();
         // TODO:
         // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
         // on those classes so that the call to Deserialize above works properly.
