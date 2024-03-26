@@ -67,7 +67,7 @@ public static class RecursionTester {
         Console.WriteLine(CountWaysToClimb(20)); // 121415
         // Uncomment out the test below after implementing memoization.  It won't work without it.
         // TODO Problem 3
-        // Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
+        Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
 
         // Sample Test Cases (may not be comprehensive) 
         Console.WriteLine("\n=========== PROBLEM 4 TESTS ===========");
@@ -146,8 +146,13 @@ public static class RecursionTester {
     /// n &lt;= 0, just return 0.   A loop should not be used.
     /// </summary>
     public static int SumSquaresRecursive(int n) {
-        // TODO Start Problem 1
-        return 0;
+        
+        if (n <= 0) {
+            return 0;
+        }
+        else {
+            return (n * n) + SumSquaresRecursive(n - 1);
+        }
     }
 
     /// <summary>
@@ -170,7 +175,16 @@ public static class RecursionTester {
     /// and the length of the letters list).
     /// </summary>
     public static void PermutationsChoose(string letters, int size, string word = "") {
-        // TODO Start Problem 2
+        
+        if (word.Length == size) {
+            Console.WriteLine(word);
+        } else {
+            for (int i = 0; i < letters.Length; i++)
+            {
+                string newLetters = letters.Remove(i, 1);
+                PermutationsChoose(newLetters, size, letters[i] + word);
+            }
+        }
     }
 
     /// <summary>
@@ -229,8 +243,15 @@ public static class RecursionTester {
         if (s == 3)
             return 4;
 
+        if (remember == null)
+            remember = new Dictionary<int, decimal>();
+        
+        if (remember.ContainsKey(s))
+            return remember[s];
+
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+        remember[s] = ways;
         return ways;
     }
 
@@ -248,7 +269,13 @@ public static class RecursionTester {
     /// some of the string functions like IndexOf and [..X] / [X..] to be useful in solving this problem.
     /// </summary>
     public static void WildcardBinary(string pattern) {
-        // TODO Start Problem 4
+        if (!pattern.Contains('*')) {
+            Console.WriteLine(pattern);
+        } else {
+            int wildcardIdx = pattern.IndexOf('*');
+            WildcardBinary(pattern.Remove(wildcardIdx, 1).Insert(wildcardIdx, "0"));
+            WildcardBinary(pattern.Remove(wildcardIdx, 1).Insert(wildcardIdx, "1"));
+        }
     }
 
     /// <summary>
@@ -261,11 +288,25 @@ public static class RecursionTester {
         if (currPath == null)
             currPath = new List<ValueTuple<int, int>>();
 
-        // currPath.Add((1,2)); // Use this syntax to add to the current path
+        currPath.Add((x, y));
 
-        // TODO Start Problem 5
-        // ADD CODE HERE
+        if (maze.IsEnd(x, y)) {
+            Console.WriteLine(currPath.AsString());
+            return;
+        }
 
-        // Console.WriteLine(currPath.AsString()); // Use this to print out your path when you find the solution
+        if (maze.IsValidMove(currPath, x + 1, y)) {
+            List<ValueTuple<int, int>> newPath = new List<ValueTuple<int, int>>(currPath);
+            SolveMaze(maze, x + 1, y, newPath);
+        } if (maze.IsValidMove(currPath, x - 1, y)) {
+            List<ValueTuple<int, int>> newPath = new List<ValueTuple<int, int>>(currPath);
+            SolveMaze(maze, x - 1, y, newPath);
+        } if (maze.IsValidMove(currPath, x, y + 1)) {
+            List<ValueTuple<int, int>> newPath = new List<ValueTuple<int, int>>(currPath);
+            SolveMaze(maze, x, y + 1, newPath);
+        } if (maze.IsValidMove(currPath, x, y - 1)) {
+            List<ValueTuple<int, int>> newPath = new List<ValueTuple<int, int>>(currPath);
+            SolveMaze(maze, x, y - 1, newPath);
+        }
     }
 }
